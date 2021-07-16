@@ -1,0 +1,86 @@
+//OOPs - concept
+
+//1. Encapsulation
+
+class Rectangle {
+    let width : Int
+    let length : Int
+    private var area : Int?
+
+    init(width : Int, length : Int) {
+        self.width = width
+        self.length = length
+    }
+    func calculateArea() {
+        area = width*length
+    }
+    func printArea() {
+        print("the area is - \(area ?? 0)")
+    }
+}
+let rect = Rectangle(width: 25, length: 10)
+rect.calculateArea()
+rect.printArea()
+
+//2. Polymorphism & 3. Inheritance
+class Rectangle {
+    var width : Int
+    var length : Int
+    init(width : Int, length : Int) {
+        self.width = width
+        self.length = length
+    }
+    func getPerimeter() -> Int {
+        return 2*(length+width)
+    }
+}
+
+class Cuboid : Rectangle {
+    var height : Int
+    init(width : Int, length : Int, height : Int) {
+        self.height = height
+        super.init(width: width, length: length)
+    }
+    override func getPerimeter() -> Int {
+        return 4*(length + width + height)
+    }
+}
+
+//4. Abstraction - ref solid principles program
+
+protocol DataChangerProtocol {
+    func insertRows(_ value : Detail)
+}
+class Detail {
+    var id : Int = 0
+    var name : String = ""
+}
+class Data : DataChangerProtocol { // main class
+    
+    var changeData : DataChangerProtocol
+    init(changeData : DataChangerProtocol) {
+        self.changeData = changeData
+    }
+    func createTable() {
+        print("creating sql table with id")
+    }
+    func readTable() {
+        print("printing all rows in table")
+    }
+    func insertRows(_ value : Detail) {
+        changeData.insertRows(value)
+    }
+    
+}
+class DataModifier : DataChangerProtocol { //low level class
+
+    func insertRows(_ value : Detail) {
+        print("Inserting value \(value.name) in row at a")
+    }
+    func updateRows() {
+        print("Changing value in row from a to b")
+    }
+    func sortTable() {
+        print("sort by age in ascending order")
+    }
+}
