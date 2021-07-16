@@ -1,0 +1,168 @@
+//: A UIKit based Playground for presenting user interface
+  
+import Foundation
+
+//MARK: - Single Responsibility Principle - correct manner
+
+class DataBaseFetcher {
+    func createTable() {
+        print("creating sql table")
+    }
+    func readTable() {
+        print("printing all rows in table")
+    }
+}
+class DataBaseModifier {
+    func updateRows() {
+        print("Changing value in row from a to b")
+    }
+    func sortTable() {
+        print("sort by age in ascending order")
+    }
+}
+
+//MARK: - Open Close Principle - correct manner
+protocol ShapeDimensionCalculator {
+    func getPerimeter() -> Int
+}
+
+class Square {
+    let side : Int
+    init(side : Int) {
+        self.side = side
+    }
+    func getPerimeter() -> Int {
+        return 4*side
+    }
+}
+
+class Rectangle {
+    let width : Int
+    let length : Int
+    init(width : Int, length : Int) {
+        self.width = width
+        self.length = length
+    }
+    func getPerimeter() -> Int {
+        return 2*(length+width)
+    }
+}
+
+class PerimeterCalculator {
+    func perimeter(of shape : AnyObject) -> Int {
+        if shape is Rectangle {
+        let rect = shape as! Rectangle
+            return rect.getPerimeter()
+        }
+        else if shape is Square {
+            let square = shape as! Square
+            return square.getPerimeter()
+        }
+    return 0
+    }
+    
+}
+
+let squarePerimeterCalculator = PerimeterCalculator()
+let sq = Square(side: 5)
+let sqPerimeterResult = squarePerimeterCalculator.perimeter(of: sq)
+print("The perimeter is: ", sqPerimeterResult)
+
+let rectPerimeterCalculator = PerimeterCalculator()
+let rect = Rectangle(width: 5, length: 6)
+let rectPerimeterResult = rectPerimeterCalculator.perimeter(of: rect)
+print("The perimeter is: ", rectPerimeterResult)
+
+//MARK: - Liskov’s Subsitution Principle - correct manner
+
+//same as above
+
+//MARK: - Interface segregation - correct manner
+
+protocol LivingThing {
+    func eat()
+    func sleep()
+}
+
+protocol Human {
+    func work()
+    func study()
+}
+protocol Animal {
+    func hunt()
+    func bark()
+}
+class Person : LivingThing,Human {
+    
+    func eat() {
+        print("the boy is eating food")
+    }
+
+    func sleep() {
+        print("the boy is sleeping")
+    }
+    func work() {
+        print("working at office")
+    }
+
+    func study() {
+        print("study and get a degree")
+    }
+}
+
+class Dog : LivingThing, Animal {
+    func hunt() {
+        print("hunts rabbits")
+    }
+
+    func bark() {
+        print("barking")
+    }
+
+    func eat() {
+        print("the dog is eating food")
+    }
+
+    func sleep() {
+        print("the dog is sleeping")
+    }
+
+}
+
+//MARK: - Dependency Inversion Principle - correct manner
+protocol DataChangerProtocol {
+    func insertRows(_ value : Detail)
+}
+struct Detail {
+    var id : Int
+    var name : String
+}
+class Data : DataChangerProtocol { // main class
+    
+    var changeData : DataChangerProtocol
+    init(changeData : DataChangerProtocol) {
+        self.changeData = changeData
+    }
+    func createTable() {
+        print("creating sql table with id")
+    }
+    func readTable() {
+        print("printing all rows in table")
+    }
+    func insertRows(_ value : Detail) {
+        changeData.insertRows(value)
+    }
+    
+}
+class DataModifier : DataChangerProtocol { //low level class
+
+    func insertRows(_ value : Detail) {
+        print("Inserting value \(value.name) in row at a")
+    }
+    func updateRows() {
+        print("Changing value in row from a to b")
+    }
+    func sortTable() {
+        print("sort by age in ascending order")
+    }
+}
