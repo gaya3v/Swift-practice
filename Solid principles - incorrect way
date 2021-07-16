@@ -1,0 +1,166 @@
+//: A Cocoa based Playground to present user interface
+
+import Foundation
+
+//MARK: - Single Responsibility Principle - without usage
+class SQLDataBase {
+    func createTable() {
+        print("creating sql table")
+    }
+    func readTable() {
+        print("printing all rows in table")
+    }
+    func updateRows() {
+        print("Changing value in row from a to b")
+    }
+    func sortTable() {
+        print("sort by age in ascending order")
+    }
+}
+ 
+//MARK: - Open Close Principle - without usage
+class Square {
+    let side : Int
+    init(side : Int) {
+        self.side = side
+    }
+    func getPerimeter() -> Int {
+        return 4*side
+    }
+}
+
+class Rectangle {
+    var width : Int
+    var length : Int
+    init(width : Int, length : Int) {
+        self.width = width
+        self.length = length
+    }
+    func getPerimeter() -> Int {
+        return 2*(length+width)
+    }
+}
+
+class PerimeterCalculator {
+    func perimeter(of shape : Square) -> Int {
+        return shape.getPerimeter()
+    }
+    func perimeter(of shape : Rectangle) -> Int {
+        return shape.getPerimeter()
+    }
+}
+
+let squarePerimeterCalculator = PerimeterCalculator()
+let sq = Square(side: 5)
+let sqPerimeterResult = squarePerimeterCalculator.perimeter(of: sq)
+print("The perimeter is: ", sqPerimeterResult)
+
+let rectPerimeterCalculator = PerimeterCalculator()
+let rect = Rectangle(width: 5, length: 6)
+let rectPerimeterResult = rectPerimeterCalculator.perimeter(of: rect)
+print("The perimeter is: ", rectPerimeterResult)
+
+//MARK: - Liskov’s Subsitution Principle - without usage
+
+class Cuboid : Rectangle {
+    var height : Int
+    init(width : Int, length : Int, height : Int) {
+        self.height = height
+        super.init(width: width, length: length)
+    }
+    override func getPerimeter() -> Int {
+        return 4*(length + width + height)
+    }
+}
+
+let cuboidPerimeterCalculator = PerimeterCalculator()
+let cuboid = Cuboid(width: 5, length: 6,height: 4)
+let cuboidPerimeterResult = cuboidPerimeterCalculator.perimeter(of: cuboid)
+print("The perimeter is: ", cuboidPerimeterResult)
+
+//MARK: - Interface segregation - without usage
+
+protocol LivingThing {
+    func eat()
+    func sleep()
+    func work()
+    func study()
+    func bark()
+}
+class Person : LivingThing {
+    func eat() {
+        print("the boy is eating food")
+    }
+
+    func sleep() {
+        print("the boy is sleeping")
+    }
+    
+    func bark() {
+    }
+
+    func work() {
+        print("working at office")
+    }
+
+    func study() {
+        print("study and get a degree")
+    }
+}
+
+class Dog : LivingThing {
+    func work() {
+    }
+
+    func study() {
+    }
+
+    func bark() {
+        print("barking")
+    }
+
+    func eat() {
+        print("the dog is eating food")
+    }
+
+    func sleep() {
+        print("the dog is sleeping")
+    }
+
+}
+
+//MARK: - Dependency Inversion Principle - without usage
+
+struct Detail {
+    var id : Int
+    var name : String
+}
+class Data { // main class
+    
+    var changeData : DataModifier
+    init(changeData : DataModifier) {
+        self.changeData = changeData
+    }
+    func createTable() {
+        print("creating sql table with id")
+    }
+    func readTable() {
+        print("printing all rows in table")
+    }
+    func modifyTable(_ value : Detail) {
+        changeData.insertRows(value)
+    }
+    
+}
+class DataModifier { //low level class
+
+    func insertRows(_ value : Detail) {
+        print("Inserting value \(value.name) in row at a")
+    }
+    func updateRows() {
+        print("Changing value in row from a to b")
+    }
+    func sortTable() {
+        print("sort by age in ascending order")
+    }
+}
