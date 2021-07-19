@@ -1,0 +1,62 @@
+import Foundation
+
+var cardNumberArray : [Int] = []
+let userAccount = Account(cardNumber: 0, balance: 0.0)
+var transaction = Transaction()
+
+let atm = ATM(id: "1", branchName: "Anna Nagar", bankName: "HDFC Bank")
+print("Welcome to \(atm.branchName) branch ATM of \(atm.bankName) ")
+
+//get card number
+print("Enter card number to begin the process : ")
+if let cardNum = readLine() {
+    userAccount.cardNumber = (Int(cardNum))!
+    cardNumberArray.append(userAccount.cardNumber)
+}
+
+//get balance
+print("Enter initial balance for transactions : ")
+if let bal = readLine() {
+    userAccount.balance = Double(bal) ?? 0.0
+    transaction.balance = userAccount.balance
+    transaction.showBalance()
+}
+
+//check for min balance of $100
+if (transaction.hasMinimumBalance(amount: userAccount.balance)) {
+    
+    while (true) {
+        print("Please enter a choice - \n 1. Withdraw \n 2. Deposit \n 3. Swipe \n 4. Show \n 5. Quit")
+        let str = readLine()
+        let choice = Int(str ?? "-1")
+        switch(choice) {
+        case 1 :
+            print("Enter amount : ")
+            let amount = readLine()
+            transaction.withdraw(amount: (Double(amount!)) ?? 0.0)
+        case 2 :
+            print("Enter amount : ")
+            let amount = readLine()
+            transaction.deposit(amount: (Double(amount!)) ?? 0.0)
+        case 3 :
+            print("Enter amount : ")
+            let amount = readLine()
+            transaction.swipe(amount: (Double(amount!)) ?? 0.0)
+        case 4 :
+            transaction.showBalance()
+        case 5:
+            print("Thank you for banking with us!")
+            exit(0)
+            
+        default:
+            print("Enter correct choice !!")
+            
+        }
+    }
+    
+}
+else {
+    print("Insufficient balance for transaction processes")
+    
+}
+
